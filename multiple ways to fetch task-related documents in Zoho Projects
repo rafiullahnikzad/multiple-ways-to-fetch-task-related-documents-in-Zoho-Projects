@@ -1,1 +1,67 @@
+// ========================================
+// CONFIGURATION
+// ========================================
+portalId = "brpppppppesittttyag";
+projectId = 300000000000000569035;
+taskId = 3000000000000000570932;
 
+// ========================================
+// Method 1: Use Zoho Projects Integration Task
+// ========================================
+taskDetails = zoho.projects.getRecordById(portalId, projectId, "tasks", taskId, "projects_conn");
+info "Task via Integration: " + taskDetails;
+
+// ========================================
+// Method 2: Check if documents are in Comments/Attachments
+// ========================================
+commentsUrl = "https://projectsapi.zoho.eu/restapi/portal/" + portalId + "/projects/" + projectId + "/tasks/" + taskId + "/comments/";
+
+commentsResponse = invokeurl
+[
+    url: commentsUrl
+    type: GET
+    connection: "projects_conn"
+];
+info "Task Comments: " + commentsResponse;
+
+// ========================================
+// Method 3: Try the V3 attachment endpoint
+// ========================================
+attachUrl = "https://projectsapi.zoho.eu/api/v3/portal/" + portalId + "/projects/" + projectId + "/tasks/" + taskId + "/attachments";
+
+attachResponse = invokeurl
+[
+    url: attachUrl
+    type: GET
+    connection: "projects_conn"
+];
+info "V3 Attachments: " + attachResponse;
+
+// ========================================
+// Method 4: Get Project Folders
+// ========================================
+foldersUrl = "https://projectsapi.zoho.eu/restapi/portal/" + portalId + "/projects/" + projectId + "/folders/";
+
+foldersResponse = invokeurl
+[
+    url: foldersUrl
+    type: GET
+    connection: "projects_conn"
+];
+info "Project Folders: " + foldersResponse;
+
+// ========================================
+// Method 5: Try numeric portal ID for attachments
+// ========================================
+numericPortalId = "2033333344448248";
+attachUrl2 = "https://projectsapi.zoho.eu/restapi/portal/" + numericPortalId + "/projects/" + projectId + "/tasks/" + taskId + "/attachments/";
+
+attachResponse2 = invokeurl
+[
+    url: attachUrl2
+    type: GET
+    connection: "projects_conn"
+];
+info "Attachments (Numeric Portal): " + attachResponse2;
+
+return "success";
